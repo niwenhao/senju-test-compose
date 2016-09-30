@@ -1,0 +1,9 @@
+version: '2'
+services:
+    app:
+        build: app
+        hostname: app
+        container_name: app
+        expose:
+            - 3000
+        command: bash -c 'while true; do sleep 10; done'
