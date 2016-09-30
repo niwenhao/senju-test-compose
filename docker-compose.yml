@@ -2,17 +2,19 @@ version: '2'
 services:
     app:
         build: app
+        image: niwenhao/senju_app
         hostname: app
         container_name: app
         volumes:
-            - ${HOME}/workspace/SenjuTest:/root/SenjuTest:rw
+            - ${HOME}/workspace/senju-test-compose/SenjuTest:/root/SenjuTest:rw
         links:
             - db
         expose:
             - 3000
         command: bash -c 'while true; do sleep 10; done'
     db:
-        build: db
+        #build: db
+        image: postgres
         environment:
             POSTGRES_USER: senju
             POSTGRES_DB: senjudb

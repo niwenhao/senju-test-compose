@@ -1,0 +1,47 @@
+current directory: /root/SenjuTest/gems/ruby/2.3.0/gems/therubyracer-0.12.2/ext/v8
+/usr/local/bin/ruby -r ./siteconf20160930-61-1yfr3dr.rb extconf.rb
+checking for main() in -lpthread... yes
+creating Makefile
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  /root/SenjuTest/gems/ruby/2.3.0/extensions/x86_64-linux/2.3.0-static/therubyracer-0.12.2/mkmf.log
+
+current directory: /root/SenjuTest/gems/ruby/2.3.0/gems/therubyracer-0.12.2/ext/v8
+make "DESTDIR=" clean
+
+current directory: /root/SenjuTest/gems/ruby/2.3.0/gems/therubyracer-0.12.2/ext/v8
+make "DESTDIR="
+compiling backref.cc
+compiling context.cc
+compiling trycatch.cc
+compiling init.cc
+compiling constants.cc
+compiling handles.cc
+compiling constraints.cc
+compiling value.cc
+compiling array.cc
+compiling heap.cc
+compiling signature.cc
+compiling primitive.cc
+compiling message.cc
+compiling date.cc
+compiling string.cc
+compiling external.cc
+compiling object.cc
+compiling gc.cc
+compiling script.cc
+compiling v8.cc
+compiling invocation.cc
+compiling exception.cc
+compiling stack.cc
+compiling template.cc
+compiling locker.cc
+compiling function.cc
+compiling accessor.cc
+compiling rr.cc
+linking shared-object v8/init.so
+
+current directory: /root/SenjuTest/gems/ruby/2.3.0/gems/therubyracer-0.12.2/ext/v8
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 init.so ./.gem.20160930-61-iwdn6i/v8
