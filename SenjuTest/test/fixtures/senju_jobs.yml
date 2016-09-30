@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+timeout:
+  name: timeout
+  description: monitor access log for timeout record
+  command: ls /etc
+  expected: 0
+  senjuEnv: web
+
+start:
+  name: start
+  description: start schedular with preExec and postExec
+  command: ls /var
+  expected: 0
+  senjuEnv: bat
+  preExec: clear_log (ShellTask)
+  postExec: afterfollow (ShellTask)
+
+process:
+  name: proces_log
+  description: log process
+  command: something
+  expected: 0

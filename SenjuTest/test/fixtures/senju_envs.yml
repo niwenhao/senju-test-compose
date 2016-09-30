@@ -1,0 +1,16 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+bat:
+  name: "batch"
+  logonUser: "aplusr01"
+  hostName: "adbatv01"
+
+web:
+  name: "webap"
+  logonUser: "webadm01"
+  hostName: "zxweba01"
+
+adm:
+  name: "admin"
+  logonUser: "aplusr01"
+  hostName: "zxadmv01"

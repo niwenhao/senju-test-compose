@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+stat:
+  name: statistics
+  description: net for statistics
+  senjuEnv: adm
+  preExec: clear_log(ShellTask)
+  postExec: afterfollow(ShellTask)
+
+night:
+  name: nighttask
+  description: Process in night
+  senjuEnv: bat

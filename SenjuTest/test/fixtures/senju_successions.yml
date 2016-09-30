@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+stat1_2:
+  left: stat1
+  right: stat2
+
+stat2_3:
+  left: stat2
+  right: stat3
+
+night1_2:
+  left: night1
+  right: night2

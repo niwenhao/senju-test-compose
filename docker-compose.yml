@@ -4,6 +4,19 @@ services:
         build: app
         hostname: app
         container_name: app
+        volumes:
+            - ${HOME}/workspace/SenjuTest:/root/SenjuTest:rw
+        links:
+            - db
         expose:
             - 3000
         command: bash -c 'while true; do sleep 10; done'
+    db:
+        build: db
+        environment:
+            POSTGRES_USER: senju
+            POSTGRES_DB: senjudb
+            POSTGRES_PASSWORD: password
+        hostname: db
+        container_name: db
+
