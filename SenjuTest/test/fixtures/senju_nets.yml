@@ -4,8 +4,6 @@ stat:
   name: statistics
   description: net for statistics
   senjuEnv: adm
-  preExec: clear_log(ShellTask)
-  postExec: afterfollow(ShellTask)
 
 night:
   name: nighttask

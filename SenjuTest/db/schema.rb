@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160929043945) do
+ActiveRecord::Schema.define(version: 20161001124008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,15 +42,9 @@ ActiveRecord::Schema.define(version: 20160929043945) do
     t.string   "command"
     t.integer  "expected"
     t.integer  "senjuEnv_id"
-    t.string   "preExec_type"
-    t.integer  "preExec_id"
-    t.string   "postExec_type"
-    t.integer  "postExec_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.index ["name"], name: "index_senju_jobs_on_name", using: :btree
-    t.index ["postExec_type", "postExec_id"], name: "index_senju_jobs_on_postExec_type_and_postExec_id", using: :btree
-    t.index ["preExec_type", "preExec_id"], name: "index_senju_jobs_on_preExec_type_and_preExec_id", using: :btree
     t.index ["senjuEnv_id"], name: "index_senju_jobs_on_senjuEnv_id", using: :btree
   end
 
@@ -58,15 +52,9 @@ ActiveRecord::Schema.define(version: 20160929043945) do
     t.string   "name"
     t.string   "description"
     t.integer  "senjuEnv_id"
-    t.string   "preExec_type"
-    t.integer  "preExec_id"
-    t.string   "postExec_type"
-    t.integer  "postExec_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.index ["name"], name: "index_senju_nets_on_name", using: :btree
-    t.index ["postExec_type", "postExec_id"], name: "index_senju_nets_on_postExec_type_and_postExec_id", using: :btree
-    t.index ["preExec_type", "preExec_id"], name: "index_senju_nets_on_preExec_type_and_preExec_id", using: :btree
     t.index ["senjuEnv_id"], name: "index_senju_nets_on_senjuEnv_id", using: :btree
   end
 
@@ -79,6 +67,19 @@ ActiveRecord::Schema.define(version: 20160929043945) do
     t.index ["left_id"], name: "index_senju_successions_on_left_id", using: :btree
     t.index ["right_id"], name: "index_senju_successions_on_right_id", using: :btree
     t.index ["task_id"], name: "index_senju_successions_on_task_id", using: :btree
+  end
+
+  create_table "senju_test_cases", force: :cascade do |t|
+    t.string   "name"
+    t.string   "owner"
+    t.string   "preTask_type"
+    t.integer  "preTask_id"
+    t.string   "postTask_type"
+    t.integer  "postTask_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["postTask_type", "postTask_id"], name: "index_senju_test_cases_on_postTask_type_and_postTask_id", using: :btree
+    t.index ["preTask_type", "preTask_id"], name: "index_senju_test_cases_on_preTask_type_and_preTask_id", using: :btree
   end
 
   create_table "senju_trigers", force: :cascade do |t|

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  owner: MyString
+  preTask: one
+  preTask_type: Pretask
+  postTask: one
+  postTask_type: Posttask
+
+two:
+  name: MyString
+  owner: MyString
+  preTask: two
+  preTask_type: Pretask
+  postTask: two
+  postTask_type: Posttask

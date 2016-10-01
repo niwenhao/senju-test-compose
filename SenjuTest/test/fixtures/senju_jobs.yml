@@ -13,8 +13,6 @@ start:
   command: ls /var
   expected: 0
   senjuEnv: bat
-  preExec: clear_log (ShellTask)
-  postExec: afterfollow (ShellTask)
 
 process:
   name: proces_log
