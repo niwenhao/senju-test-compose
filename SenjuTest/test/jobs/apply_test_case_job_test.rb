@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SenjuTestCaseTest < ActiveSupport::TestCase
+class ApplyTestCaseJobTest < ActiveJob::TestCase
   # test "the truth" do
   #   assert true
   # end
