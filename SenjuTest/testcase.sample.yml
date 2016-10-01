@@ -1,0 +1,112 @@
+testcase_name:
+  description: a sample test case
+  default:
+    exec_env:
+      env:
+        host: adbat001
+        user: aplusr31
+    pre_exec: do_nothing
+    post_exec: expected_ok
+    succession_exec: do_nothing
+
+  exec_envs:
+    by_name:
+      bat_apl11:
+        host: adbat001
+        user: aplusr41
+      adm_apl05:
+        host: adadm001
+        user: aplusr40
+    by_object:
+      net_name:
+        object_name:
+          host: adadm001
+          user: aplusr40
+      zxapfdstat001:
+        zxnd001:
+          host: adadm001
+          user: aplusr40
+    by_succession:
+      net_name:
+        pre_name:
+          post_name:
+            host: adadm001
+            user: aplusr40
+      zxnd001:
+        zxjd001001:
+          zxjd001002:
+            host: adadm001
+            user: aplusr40
+  tasks:
+    by_name:
+      zxjd001001:
+        pre_task:
+          env:
+            host: adadm001
+            user: aplusr40
+          exec:
+            type: bash
+            script: |
+              cd $APL_PKG01_DIR/data0
+              cat <<END > input.io
+              aaaaa
+              bbbbb
+              ccccc
+              END
+
+              exit $CONTINUE
+              exit $RETRY_PRETASK
+              exit $RETRY_OBJECT
+              exit $RETRY_POSTTASK
+              exit $OK
+              exit $NG
+
+    by_net_object:
+      zxnd001:
+        zxjd001001:
+          post_task:
+            env:
+              host: adadm001
+              user: aplusr40
+            exec:
+              type: bash
+              script: |
+                cd $APL_PKG01_DIR/data0
+                cat <<END > input.io
+                aaaaa
+                bbbbb
+                ccccc
+                END
+
+                exit $CONTINUE
+                exit $RETRY_PRETASK
+                exit $RETRY_OBJECT
+                exit $RETRY_POSTTASK
+                exit $OK
+                exit $NG
+
+    by_succession:
+      zxnd001:
+        zxjd001001:
+          zxjd001002:
+            env:
+              host: adadm001
+              user: aplusr40
+            exec:
+              type: bash
+              script: |
+                cd $APL_PKG01_DIR/data0
+                cat <<END > input.io
+                aaaaa
+                bbbbb
+                ccccc
+                END
+
+                exit $CONTINUE
+                exit $RETRY_PRETASK
+                exit $RETRY_OBJECT
+                exit $RETRY_POSTTASK
+                exit $OK
+                exit $NG
+
+

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161001124008) do
+ActiveRecord::Schema.define(version: 20161001130419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,25 +61,10 @@ ActiveRecord::Schema.define(version: 20161001124008) do
   create_table "senju_successions", force: :cascade do |t|
     t.integer  "left_id"
     t.integer  "right_id"
-    t.integer  "task_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["left_id"], name: "index_senju_successions_on_left_id", using: :btree
     t.index ["right_id"], name: "index_senju_successions_on_right_id", using: :btree
-    t.index ["task_id"], name: "index_senju_successions_on_task_id", using: :btree
-  end
-
-  create_table "senju_test_cases", force: :cascade do |t|
-    t.string   "name"
-    t.string   "owner"
-    t.string   "preTask_type"
-    t.integer  "preTask_id"
-    t.string   "postTask_type"
-    t.integer  "postTask_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["postTask_type", "postTask_id"], name: "index_senju_test_cases_on_postTask_type_and_postTask_id", using: :btree
-    t.index ["preTask_type", "preTask_id"], name: "index_senju_test_cases_on_preTask_type_and_preTask_id", using: :btree
   end
 
   create_table "senju_trigers", force: :cascade do |t|
@@ -87,12 +72,9 @@ ActiveRecord::Schema.define(version: 20161001124008) do
     t.string   "description"
     t.string   "node"
     t.string   "path"
-    t.string   "postExec_type"
-    t.integer  "postExec_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.index ["name"], name: "index_senju_trigers_on_name", using: :btree
-    t.index ["postExec_type", "postExec_id"], name: "index_senju_trigers_on_postExec_type_and_postExec_id", using: :btree
   end
 
   create_table "shell_tasks", force: :cascade do |t|
