@@ -1,14 +1,58 @@
 testcase_name:
   net_name: zxapfdstat01
   description: a sample test case
+  post_task:
+    type: bash
+    script: |
+      cd $APL_PKG01_DIR/data0
+      cat <<END > input.io
+      aaaaa
+      bbbbb
+      ccccc
+      END
+
+      exit $CONTINUE
+      exit $OK
+      exit $NG
+  pre_task:
+    type: bash
+    script: |
+      cd $APL_PKG01_DIR/data0
+      cat <<END > input.io
+      aaaaa
+      bbbbb
+      ccccc
+      END
+
+      exit $CONTINUE
+      exit $OK
+      exit $SKIP
+      exit $NG
   default:
     exec_env:
-      env:
         host: adbat001
         user: aplusr31
-    pre_exec: do_nothing
-    post_exec: expected_ok
-    succession_exec: do_nothing
+    pre_task:
+      env:
+        host: adadm001
+        user: aplusr40
+      exec:
+        type: bash
+        script: |
+          exit $CONTINUE
+
+    post_task:
+      env:
+        host: adadm001
+        user: aplusr40
+      exec:
+        type: bash
+        script: |
+          if [ $EXIT_CODE == $EXPECTED_CODE ]; then
+            exit $CONTINUE
+          else
+            exit $NG
+          fi
 
   exec_envs:
     by_name:
@@ -56,13 +100,10 @@ testcase_name:
               END
 
               exit $CONTINUE
-              exit $RETRY_PRETASK
-              exit $RETRY_OBJECT
-              exit $RETRY_POSTTASK
               exit $OK
               exit $NG
 
-    by_net_object:
+    by_reference:
       zxnd001:
         zxjd001001:
           post_task:
@@ -80,9 +121,6 @@ testcase_name:
                 END
 
                 exit $CONTINUE
-                exit $RETRY_PRETASK
-                exit $RETRY_OBJECT
-                exit $RETRY_POSTTASK
                 exit $OK
                 exit $NG
 
@@ -104,9 +142,6 @@ testcase_name:
                 END
 
                 exit $CONTINUE
-                exit $RETRY_PRETASK
-                exit $RETRY_OBJECT
-                exit $RETRY_POSTTASK
                 exit $OK
                 exit $NG
 

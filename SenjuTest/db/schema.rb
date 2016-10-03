@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20161001130419) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "net_references", force: :cascade do |t|
     t.integer  "senjuNet_id"
     t.string   "senjuObject_type"
@@ -19,9 +22,9 @@ ActiveRecord::Schema.define(version: 20161001130419) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "senjuEnv_id"
-    t.index ["senjuEnv_id"], name: "index_net_references_on_senjuEnv_id"
-    t.index ["senjuNet_id"], name: "index_net_references_on_senjuNet_id"
-    t.index ["senjuObject_type", "senjuObject_id"], name: "index_net_references_on_senjuObject_type_and_senjuObject_id"
+    t.index ["senjuEnv_id"], name: "index_net_references_on_senjuEnv_id", using: :btree
+    t.index ["senjuNet_id"], name: "index_net_references_on_senjuNet_id", using: :btree
+    t.index ["senjuObject_type", "senjuObject_id"], name: "index_net_references_on_senjuObject_type_and_senjuObject_id", using: :btree
   end
 
   create_table "senju_envs", force: :cascade do |t|
@@ -30,7 +33,7 @@ ActiveRecord::Schema.define(version: 20161001130419) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "name"
-    t.index ["name"], name: "index_senju_envs_on_name"
+    t.index ["name"], name: "index_senju_envs_on_name", using: :btree
   end
 
   create_table "senju_jobs", force: :cascade do |t|
@@ -41,8 +44,8 @@ ActiveRecord::Schema.define(version: 20161001130419) do
     t.integer  "senjuEnv_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["name"], name: "index_senju_jobs_on_name"
-    t.index ["senjuEnv_id"], name: "index_senju_jobs_on_senjuEnv_id"
+    t.index ["name"], name: "index_senju_jobs_on_name", using: :btree
+    t.index ["senjuEnv_id"], name: "index_senju_jobs_on_senjuEnv_id", using: :btree
   end
 
   create_table "senju_nets", force: :cascade do |t|
@@ -51,8 +54,8 @@ ActiveRecord::Schema.define(version: 20161001130419) do
     t.integer  "senjuEnv_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["name"], name: "index_senju_nets_on_name"
-    t.index ["senjuEnv_id"], name: "index_senju_nets_on_senjuEnv_id"
+    t.index ["name"], name: "index_senju_nets_on_name", using: :btree
+    t.index ["senjuEnv_id"], name: "index_senju_nets_on_senjuEnv_id", using: :btree
   end
 
   create_table "senju_successions", force: :cascade do |t|
@@ -60,8 +63,8 @@ ActiveRecord::Schema.define(version: 20161001130419) do
     t.integer  "right_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["left_id"], name: "index_senju_successions_on_left_id"
-    t.index ["right_id"], name: "index_senju_successions_on_right_id"
+    t.index ["left_id"], name: "index_senju_successions_on_left_id", using: :btree
+    t.index ["right_id"], name: "index_senju_successions_on_right_id", using: :btree
   end
 
   create_table "senju_trigers", force: :cascade do |t|
@@ -71,7 +74,7 @@ ActiveRecord::Schema.define(version: 20161001130419) do
     t.string   "path"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["name"], name: "index_senju_trigers_on_name"
+    t.index ["name"], name: "index_senju_trigers_on_name", using: :btree
   end
 
   create_table "shell_tasks", force: :cascade do |t|

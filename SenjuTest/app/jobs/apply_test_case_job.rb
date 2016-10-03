@@ -6,6 +6,5 @@ class ApplyTestCaseJob < ApplicationJob
     testcase = args[0]
 
     tconfig = YAML.load(File.new(testcase))
-
   end
 end
