@@ -1,6 +1,11 @@
 module Senju::TestCase::RunnerHelper
   class TestContext
     attr_accessor :host, :user
+
+    def initialize(host, user)
+      @host = host
+      @user = user
+    end
   end
 
   module ExecEnvDigger
