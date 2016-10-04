@@ -2,32 +2,40 @@ testcase_name:
   net_name: zxapfdstat01
   description: a sample test case
   post_task:
-    type: bash
-    script: |
-      cd $APL_PKG01_DIR/data0
-      cat <<END > input.io
-      aaaaa
-      bbbbb
-      ccccc
-      END
+    env:
+      host: adadm001
+      user: aplusr40
+    exec:
+      type: bash
+      script: |
+        cd $APL_PKG01_DIR/data0
+        cat <<END > input.io
+        aaaaa
+        bbbbb
+        ccccc
+        END
 
-      exit $CONTINUE
-      exit $OK
-      exit $NG
+        exit $CONTINUE
+        exit $OK
+        exit $NG
   pre_task:
-    type: bash
-    script: |
-      cd $APL_PKG01_DIR/data0
-      cat <<END > input.io
-      aaaaa
-      bbbbb
-      ccccc
-      END
+    env:
+      host: adadm001
+      user: aplusr40
+    exec:
+      type: bash
+      script: |
+        cd $APL_PKG01_DIR/data0
+        cat <<END > input.io
+        aaaaa
+        bbbbb
+        ccccc
+        END
 
-      exit $CONTINUE
-      exit $OK
-      exit $SKIP
-      exit $NG
+        exit $CONTINUE
+        exit $OK
+        exit $SKIP
+        exit $NG
   default:
     exec_env:
         host: adbat001

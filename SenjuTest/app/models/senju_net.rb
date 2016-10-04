@@ -1,4 +1,6 @@
 class SenjuNet < ApplicationRecord
+  include Senju::TestCase::RunnerHelper::ExecEnvDigger
+
   NAME = 0
   AVA_DATE = 1
   DESC = 3
@@ -19,19 +21,5 @@ class SenjuNet < ApplicationRecord
   belongs_to :postExec, polymorphic: true, dependent: :destroy, optional: true
   has_many :netReferences, dependent: :destroy, foreign_key: "senjuNet_id"
 
-  alias :refs :netReferences
-
-  def find_exec_ctx(config, context)
-    c = config.exec_envs.by_name[self.name]
-    if c then
-      return TestContext.new(host: c.host, user: c.user)
-    end
-
-    c = config.exec_envs.by_name[self.senjuEnv.name] if self.senjuEnv
-    if c then
-      return TestContext.new(host: c.host, user: c.user)
-    end
-
-    context
-  end
+  alias_attribute :refs :netReferences
 end
