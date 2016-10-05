@@ -1,0 +1,74 @@
+testcase_name:
+  net_name: zxapfdstat01
+  description: 統計情報テストケース
+  senju_date: "20160916"
+  pre_task:
+    exec:
+      type: bash
+      script: |
+        ssh root@10.200.0.11 'rm -rf /bkup && cd / && tar -xf -' < _bkup.tar
+  default:
+    exec_env:
+      host: 10.200.0.11
+      user: aplusr01
+
+    pre_task:
+      exec:
+        type: bash
+        script: |
+          exit $CONTINUE
+
+    post_task:
+      exec:
+        type: bash
+        script: |
+          if [ "$EXIT_CODE" == "$EXPECTED_CODE" ]; then
+            exit $CONTINUE
+          else
+            exit $NG
+          fi
+
+  exec_envs:
+    by_name:
+      zbtcv1_apl0130:
+        host: 10.200.0.11
+        user: aplusr03
+      zadcv1_apl0101:
+        host: 10.200.0.11
+        user: aplusr01
+  tasks:
+    by_name:
+      zxktnd010:
+        post_task:
+          exec:
+            type: csh
+            script: |
+              cat logsget.tar.gz_zenba | ssh root@10.200.0.11 'mkdir -p /bkup/bkdata1/forapl && cat > /bkup/bkdata1/forapl/logsget.tar.gz'
+
+      zxktnd020:
+        post_task:
+          exec:
+            type: csh
+            script: |
+              cat logsget.tar.gz_goba | ssh root@10.200.0.11 'mkdir -p /bkup/bkdata1/forapl && cat > /bkup/bkdata1/forapl/logsget.tar.gz'
+
+      zxktnd030:
+        post_task:
+          exec:
+            type: csh
+            script: |
+              cat logsget.tar.gz_goba | ssh root@10.200.0.11 'mkdir -p /bkup/bkdata1/forapl && cat > /bkup/bkdata1/forapl/logsget.tar.gz'
+
+      zxktnd040:
+        post_task:
+          exec:
+            type: csh
+            script: |
+              cat logsget.tar.gz_night | ssh root@10.200.0.11 'mkdir -p /bkup/bkdata1/forapl && cat > /bkup/bkdata1/forapl/logsget.tar.gz'
+
+      zxktnd090:
+        pre_task:
+          exec:
+            type: csh
+            script: exit $SKIP
+
