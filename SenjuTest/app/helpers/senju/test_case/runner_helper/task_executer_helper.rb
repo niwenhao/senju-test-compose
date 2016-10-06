@@ -1,5 +1,7 @@
 module Senju::TestCase::RunnerHelper::TaskExecuterHelper
   module TaskExecuter
+    include Senju::CommonLogHelper
+
     # タスクの戻り値、OK/NGでテスト終了したい場合、raise対象になる。
     STATUS_OK = TestExitException.new code: 1
     STATUS_NG = TestExitException.new code: 2
@@ -35,9 +37,25 @@ module Senju::TestCase::RunnerHelper::TaskExecuterHelper
     #               cccc
     #
     def execute_task(task)
-      IO.popen("ssh #{task.env.user}@#{task.env.host} #{task.exec.type}", "w") do |io|
-        io << task.exec.script
+      info { <<EOS
+タスクを実行する。
+ホスト      ：#{task.env.host}
+ユーザ      ：#{task.env.user}
+タイプ      ：#{task.exec.type}
+スクリプト  ：#{task.exec.script}
+EOS
+            }
+
+      if task.env.nil? then
+        IO.popen("#{task.exec.type}", "w") do |io|
+          io << task.exec.script
+        end
+      else
+        IO.popen("ssh #{task.env.user}@#{task.env.host} #{task.exec.type}", "w") do |io|
+          io << task.exec.script
+        end
       end
+      $?.exitstatus
     end
   end
 end

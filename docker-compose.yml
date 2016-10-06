@@ -6,9 +6,11 @@ services:
         hostname: app
         container_name: app
         volumes:
-            - ${HOME}/workspace/senju-test-compose/SenjuTest:/root/SenjuTest:rw
-            - ${HOME}/myhome/_vimrc:/root/.vimrc
-            - ${HOME}/myhome/_vim:/root/.vim
+            - ${HOME}/workspace/senju-test-compose/SenjuTest:/home/dev/SenjuTest:rw
+            - ${HOME}/myhome/_vimrc:/home/dev/.vimrc
+            - ${HOME}/myhome/_vim:/home/dev/.vim
+            - /etc/rootca.crt:/etc/rootca.crt
+        env_file: /etc/environment
         links:
             - db
         expose:
