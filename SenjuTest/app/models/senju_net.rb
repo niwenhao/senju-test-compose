@@ -21,5 +21,5 @@ class SenjuNet < ApplicationRecord
   belongs_to :postExec, polymorphic: true, dependent: :destroy, optional: true
   has_many :netReferences, dependent: :destroy, foreign_key: "senjuNet_id"
 
-  alias_attribute :refs :netReferences
+  alias_attribute :refs, :netReferences
 end

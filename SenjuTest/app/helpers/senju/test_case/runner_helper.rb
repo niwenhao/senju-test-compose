@@ -28,7 +28,7 @@ module Senju::TestCase::RunnerHelper
 
   class TestCaseExecuter
     include Senju::CommonLogHelper
-    include Senju::TestCase::RunnerHelper::TaskExecuterHelper
+    include Senju::TestCase::RunnerHelper::TaskExecuterHelper::TaskExecuter
 
     attr_accessor :config
 
@@ -39,6 +39,7 @@ module Senju::TestCase::RunnerHelper
     def start
       
       debug { "PreTask of the test case will begin\n #{@config.pre_task}" }
+
       execute_task @config.pre_task unless @config.pre_task.nil?
 
       info { "Top net is #{@config.net_name}" }
@@ -126,6 +127,7 @@ EOS
 ホスト  ：#{ctx.host}
 ユーザ  ：#{ctx.user}
 EOS
+      }
       r.left.each do |prev|
         task = config.tasks.by_succession[r.senjuNet.name][pref.senjuObject.name][r.senjuObject.name]
         if task.nil? then

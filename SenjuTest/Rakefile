@@ -12,4 +12,9 @@ namespace :senju do
   task :importjar => :environment do
     ImportSenjuScriptJob.perform_now ENV["JAR_PATH"]
   end
+
+  desc "execute a test case file"
+  task :test => :environment do
+    ApplyTestCaseJob.perform_now ENV["TESTCASE"]
+  end
 end

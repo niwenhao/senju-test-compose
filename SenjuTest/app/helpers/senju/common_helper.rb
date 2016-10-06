@@ -1,13 +1,8 @@
 module Senju::CommonHelper
-  NIL_CONIFG = ConfigContext.new(nil)
   #
   # 定義情報ハッシュのラッパ
   #
   class ConfigContext
-    #
-    # ロード済みファイル一覧
-    #
-    LOADED_CONFIGS = Array.new
 
     #
     # 変数ハッシュを設定する
@@ -25,30 +20,7 @@ module Senju::CommonHelper
     #     定義をロード
     #
     def initialize(conf)
-      raise "Faile to init Config with (#{conf.inspect})" unless conf.is_a?(String) or conf.is_a?(Hash) or conf.is_a?(Array)
-
-      if conf.is_a?(String) then
-        unless LOADED_CONFIGS.index(conf)
-          confdir = File.dirname conf
-          inclst = %x(grep '^#include ' #{conf}).split(/\n/).map { |l| l.gsub(/^#include +/, "") }
-          @real_data = YAML.load_file(conf)
-          LOADED_CONFIGS << conf
-          inclst.each do |f|
-            (fpath = confdir) << "/" << f.chomp
-            if File.readable? fpath
-              c = ConfigContext.new(fpath)
-              @real_data.merge! c.real_data
-            else
-              raise "Initialize configure file (#{fpath}) failed!"
-            end
-          end
-        else
-          @real_data = Hash.new
-        end
-      else
-        @real_data = conf
-      end
-      LOG.debug2("@real_data", @real_data)
+      @real_data = conf
     end
 
     #
@@ -117,7 +89,7 @@ module Senju::CommonHelper
       end
 
       if v == nil then
-        return NIL_CONFIG
+        return ConfigContext::NIL_CONFIG
       end
 
 
@@ -127,5 +99,7 @@ module Senju::CommonHelper
     def nil?
       @real_data == nil
     end
+
+    NIL_CONFIG = ConfigContext.new(nil)
   end
 end

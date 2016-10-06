@@ -5,10 +5,10 @@ module Senju::CommonLogHelper
   LOG.level = $LOG_LEVEL
 
   def debug(&block)
-    LOG.add severity: Logger::DEBUG, progname: self.class.name, block: block if LOG.debug?
+    LOG.add(Logger::DEBUG, self.class.name) { block.call } if LOG.debug?
   end
 
   def info(&block)
-    LOG.add severity: Logger::INFO, progname: self.class.name, block: block if LOG.info?
+    LOG.add(Logger::INFO, self.class.name) { block.call } if LOG.info?
   end
 end

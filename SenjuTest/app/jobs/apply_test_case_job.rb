@@ -15,7 +15,7 @@ class ApplyTestCaseJob < ApplicationJob
     tconfig.each do |key, value|
       info { "Testcase #{key} begin" }
 
-      t = TestCaseExecuter.new config: ConfigContext.new value
+      t = TestCaseExecuter.new(ConfigContext.new(value))
       t.start
 
       info { "Testcase #{key} normal end" }
