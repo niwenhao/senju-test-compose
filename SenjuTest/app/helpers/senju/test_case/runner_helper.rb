@@ -21,8 +21,6 @@ module Senju::TestCase::RunnerHelper
       end
 
       return hctx if hctx
-
-      return TestContext.new(config.default.exec_env.host, config.default.exec_env.user)
     end
   end
 
@@ -51,7 +49,7 @@ module Senju::TestCase::RunnerHelper
     end
 
     def init_test(net)
-      ctx = net.find_exec_env(@config, nil)
+      ctx = net.find_exec_env(@config, TestContext.new(@config.default.exec_env.host, @config.default.exec_env.user))
       debug { "ネット<#{net.name}>の環境を取得しました。=> #{ctx}" }
 
 
@@ -69,7 +67,13 @@ module Senju::TestCase::RunnerHelper
     end
 
     def execute_net_objects(ctx, net)
-      info { "ネット（#{net.name}）に定義されたオブジェクト群を実行する。" }
+      info { 
+        <<EOS
+ネット配下オブジェクトを実行する。
+ネット  ：#{net.name}
+説明    ：#{net.description}
+EOS
+      }
       waits = []
       finished = []
       ready = []
@@ -143,6 +147,10 @@ EOS
           if ret == STATUS_NG.code then
             raise STATUS_NG
           end
+          if ret == STATUS_BYEBUG.code then
+            byebug
+            ret = STATUS_CONT.code
+          end
         end
       end
 
@@ -158,6 +166,10 @@ EOS
       if ret == STATUS_NG.code then
         raise STATUS_NG
       end
+      if ret == STATUS_BYEBUG.code then
+        byebug
+        ret = STATUS_CONT.code
+      end
 
       if ret == STATUS_CONT.code then
         ret = STATUS_CONT.code
@@ -170,6 +182,10 @@ EOS
         end
         if ret == STATUS_NG.code then
           raise STATUS_NG
+        end
+        if ret == STATUS_BYEBUG.code then
+          byebug
+          ret = STATUS_CONT.code
         end
 
         if ret == STATUS_CONT.code
@@ -190,6 +206,10 @@ EOS
         if ret == STATUS_NG.code then
           raise STATUS_NG
         end
+        if ret == STATUS_BYEBUG.code then
+          byebug
+          ret = STATUS_CONT.code
+        end
       end
 
       task = config.tasks.by_reference[r.senjuNet.name][r.senjuObject.name].post_task
@@ -201,6 +221,10 @@ EOS
       end
       if ret == STATUS_NG.code then
         raise STATUS_NG
+      end
+      if ret == STATUS_BYEBUG.code then
+        byebug
+        ret = STATUS_CONT.code
       end
     end
 
@@ -218,6 +242,7 @@ EOS
 千手日付    ：#{config.senju_date}
 千手ジョブ  ：#{senjuJob.name}
 コマンド    ：#{senjuJob.command}
+説明        ：#{senjuJob.description}
 EOS
            }
 

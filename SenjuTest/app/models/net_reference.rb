@@ -14,8 +14,13 @@ class NetReference < ApplicationRecord
     env = config.exec_envs.by_object[self.senjuNet.name][self.senjuObject.name]
     unless env.nil? then
       return TestContext.new(env.host, env.user)
-    else
-      return hctx
     end
+
+    env = config.exec_envs.by_name[self.senjuEnv.name] if self.senjuEnv
+    unless env.nil? then
+      return TestContext.new(env.host, env.user)
+    end
+
+    return self.senjuObject.find_exec_env(config, hctx)
   end
 end
