@@ -1,3 +1,5 @@
+require 'open3'
+
 module Senju::TestCase::RunnerHelper::TaskExecuterHelper
   module TaskExecuter
     include Senju::CommonLogHelper
@@ -19,13 +21,13 @@ module Senju::TestCase::RunnerHelper::TaskExecuterHelper
     STATUS_CONT = TestExitException.new 0
     STATUS_SKIP = TestExitException.new 3
     # ジョブを実行する場合、戻り値とジョブの期待値を環境変数にいれって、次のタスクに渡す。
-    SENJU_STATUS = "SENJU_STATUS"
-    SENJU_EXPECTED = "SENJU_EXPECTED"
+    SENJU_STATUS = "SJ_EXIT_STATUS"
+    SENJU_EXPECTED = "SJ_EXIT_EXPECTED"
 
-    ENV["OK"] = STATUS_OK.code.to_s
-    ENV["NG"] = STATUS_NG.code.to_s
-    ENV["CONTINUE"] = STATUS_CONT.code.to_s
-    ENV["SKIP"] = STATUS_SKIP.code.to_s
+    ENV["SJ_RET_OK"] = STATUS_OK.code.to_s
+    ENV["SJ_RET_NG"] = STATUS_NG.code.to_s
+    ENV["SJ_RET_CONT"] = STATUS_CONT.code.to_s
+    ENV["SJ_RET_SKIP"] = STATUS_SKIP.code.to_s
 
     #
     # タスクを実行する
@@ -51,15 +53,18 @@ module Senju::TestCase::RunnerHelper::TaskExecuterHelper
 EOS
             }
 
+      cmd = ""
+
       if task.env.nil? then
-        IO.popen("#{task.exec.type}", "w") do |io|
-          io << task.exec.script
-        end
+        cmd = task.exec.type
       else
-        IO.popen("ssh -o \"SendEnv=OK NG SKIP CONTINUE\" #{task.env.user}@#{task.env.host} #{task.exec.type}", "w") do |io|
-          io << task.exec.script
-        end
+        cmd = "ssh -o \"SendEnv=SJ_*\" #{task.env.user}@#{task.env.host} \"#{task.exec.type}\""
       end
+
+      IO.popen(ENV, cmd, "w") do |io|
+        io << task.exec.script
+      end
+
       $?.exitstatus
     end
   end

@@ -205,17 +205,8 @@ EOS
     end
 
     def execute_senju_job(config, ctx, senjuJob)
-      task = {
-        "env" => {
-          "host" => ctx.host,
-          "user" => ctx.user
-        },
-        "exec" => {
-          "type" => "csh",
-          "script" => senjuJob.command
-        }
-      }
 
+      env = Hash.new
       ENV["SJ_PEX_DATE"] = config.senju_date
       ENV["SJ_PEX_JOB"] = senjuJob.name
 
@@ -230,19 +221,20 @@ EOS
 EOS
            }
 
-      ret = execute_task ConfigContext.new(task)
+      info { "ssh -o 'SendEnv SJ_*' #{ctx.user}@#{ctx.host} '#{senjuJob.command}'" }
+      system "ssh -o 'SendEnv SJ_*' #{ctx.user}@#{ctx.host} '#{senjuJob.command}'"
 
       info { <<EOS
 千手ジョブが実行完了
-実行結果    ：#{ret}
+実行結果    ：#{$?.exitstatus}
 期待コード  ：#{senjuJob.expected}
 EOS
            }
 
-      ENV[SENJU_STATUS] = ret.to_s
+      ENV[SENJU_STATUS] = $?.exitstatus.to_s
       ENV[SENJU_EXPECTED] = senjuJob.expected.to_s
 
-      ret
+      $?.exitstatus.to_s
     end
 
   end

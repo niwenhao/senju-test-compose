@@ -25,7 +25,7 @@ class ApplyTestCaseJob < ApplicationJob
       end
     rescue TestExitException => e then
       if e.code == STATUS_NG.code then
-        info "TEST failed"
+        info { "TEST failed" }
         exit 100
       end
     end

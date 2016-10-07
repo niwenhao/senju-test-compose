@@ -16,16 +16,20 @@ testcase_name:
       exec:
         type: bash
         script: |
-          exit $CONTINUE
+          exit $SJ_RET_CONT
 
     post_task:
       exec:
         type: bash
         script: |
-          if [ "$EXIT_CODE" == "$EXPECTED_CODE" ]; then
-            exit $CONTINUE
+          cat <<END
+            SJ_EXIT_STATUS:${SJ_EXIT_STATUS}
+            SJ_EXIT_EXPECTED:${SJ_EXIT_EXPECTED}
+          END
+          if [ "$SJ_EXIT_STATUS" == "$SJ_EXIT_EXPECTED" ]; then
+            exit $SJ_RET_CONT
           else
-            exit $NG
+            exit $SJ_RET_NG
           fi
 
   exec_envs:
