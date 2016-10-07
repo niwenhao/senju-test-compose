@@ -14,13 +14,18 @@ module Senju::TestCase::RunnerHelper::TaskExecuterHelper
     end
 
     # タスクの戻り値、OK/NGでテスト終了したい場合、raise対象になる。
-    STATUS_OK = TestExitException.new code: 1
-    STATUS_NG = TestExitException.new code: 2
-    STATUS_CONT = TestExitException.new code: 0
-    STATUS_SKIP = TestExitException.new code: 3
+    STATUS_OK = TestExitException.new 1
+    STATUS_NG = TestExitException.new 2
+    STATUS_CONT = TestExitException.new 0
+    STATUS_SKIP = TestExitException.new 3
     # ジョブを実行する場合、戻り値とジョブの期待値を環境変数にいれって、次のタスクに渡す。
     SENJU_STATUS = "SENJU_STATUS"
     SENJU_EXPECTED = "SENJU_EXPECTED"
+
+    ENV["OK"] = STATUS_OK.code.to_s
+    ENV["NG"] = STATUS_NG.code.to_s
+    ENV["CONTINUE"] = STATUS_CONT.code.to_s
+    ENV["SKIP"] = STATUS_SKIP.code.to_s
 
     #
     # タスクを実行する
@@ -51,7 +56,7 @@ EOS
           io << task.exec.script
         end
       else
-        IO.popen("ssh #{task.env.user}@#{task.env.host} #{task.exec.type}", "w") do |io|
+        IO.popen("ssh -o \"SendEnv=OK NG SKIP CONTINUE\" #{task.env.user}@#{task.env.host} #{task.exec.type}", "w") do |io|
           io << task.exec.script
         end
       end

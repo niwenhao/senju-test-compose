@@ -68,7 +68,7 @@ class ImportSenjuScriptJob < ApplicationJob
 
   def extrace_jar
     sh_system "rm -rf #{WORK_DIR}/*"
-    sh_system "cd #{WORK_DIR} && jar -xf #{File::absolute_path(@inputJar)}" or raise "Failed to extrace #{@inputJar.path}.........."
+    sh_system "cd #{WORK_DIR} && jar -xf #{File::absolute_path(@inputJar)}" or raise "Failed to extrace #{@inputJar}.........."
   end
 
   def import_env

@@ -42,6 +42,10 @@ module Senju::CommonHelper
       return @real_data.inspect
     end
 
+    def to_s
+      self.inspect
+    end
+
     #
     # ArrayまたはHashのeachメソッドをラップする
     #

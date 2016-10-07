@@ -23,6 +23,8 @@ services:
             POSTGRES_USER: senju
             POSTGRES_DB: senjudb
             POSTGRES_PASSWORD: password
+        volumes:
+          - ${HOME}/workspace/senju-test-compose/pgdata:/var/lib/postgresql/data
         hostname: db
         container_name: db
 

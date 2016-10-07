@@ -1,4 +1,7 @@
 class NetReference < ApplicationRecord
+  include Senju::TestCase::RunnerHelper
+  include Senju::TestCase::RunnerHelper::ExecEnvDigger
+
   belongs_to :senjuNet
   belongs_to :senjuObject, polymorphic: true
   belongs_to :senjuEnv, optional: true
@@ -9,8 +12,8 @@ class NetReference < ApplicationRecord
 
   def find_exec_env(config, hctx)
     env = config.exec_envs.by_object[self.senjuNet.name][self.senjuObject.name]
-    if env then
-      return TestContext.new(host:env.host, user:env.user)
+    unless env.nil? then
+      return TestContext.new(env.host, env.user)
     else
       return hctx
     end

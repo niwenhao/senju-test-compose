@@ -8,5 +8,6 @@ class SenjuTriger < ApplicationRecord
 
   SENJU_TYPE = "トリガ"
 
+  belongs_to :senjuEnv, optional: true
   belongs_to :postExec, polymorphic: true, dependent: :destroy, optional: true
 end

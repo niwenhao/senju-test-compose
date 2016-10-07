@@ -11,24 +11,25 @@ module Senju::TestCase::RunnerHelper
   module ExecEnvDigger
     def find_exec_env(config, hctx)
       c = config.exec_envs.by_name[self.name]
-      if c.nil? then
-        return TestContext.new(host: c.host, user: c.user)
+      unless c.nil? then
+        return TestContext.new(c.host, c.user)
       end
 
       c = config.exec_envs.by_name[self.senjuEnv.name] if self.senjuEnv
-      if c.nil? then
-        return TestContext.new(host: c.host, user: c.user)
+      unless c.nil? then
+        return TestContext.new(c.host, c.user)
       end
 
       return hctx if hctx
 
-      return TestContext.new(host: config.default.exec_env.host, user: config.default.exec_env.user)
+      return TestContext.new(config.default.exec_env.host, config.default.exec_env.user)
     end
   end
 
   class TestCaseExecuter
     include Senju::CommonLogHelper
     include Senju::TestCase::RunnerHelper::TaskExecuterHelper::TaskExecuter
+    include Senju::CommonHelper
 
     attr_accessor :config
 
@@ -60,12 +61,7 @@ module Senju::TestCase::RunnerHelper
       end
 
 
-      starts = []
-      net.netReferences.each do |ref|
-        starts << ref if ref.leftLink.size == 0
-      end
-
-      execute_object ctx, starts
+      execute_net_objects ctx, net
 
       unless @config.tasks[net.name].post_task then
         execute_task @config.tasks[net.name].post_task
@@ -122,6 +118,9 @@ EOS
       ctx = objctx if objctx
       ctx = refctx if refctx
 
+      ENV[SENJU_STATUS] = "0"
+      ENV[SENJU_EXPECTED] = "0"
+
       info { <<EOS
 稼動環境確定
 ホスト  ：#{ctx.host}
@@ -129,95 +128,91 @@ EOS
 EOS
       }
       r.left.each do |prev|
-        task = config.tasks.by_succession[r.senjuNet.name][pref.senjuObject.name][r.senjuObject.name]
-        if task.nil? then
+        task = config.tasks.by_succession[r.senjuNet.name][prev.senjuObject.name][r.senjuObject.name]
+        unless task.nil? then
           info { <<EOS
 後続関係の定義タスクを実行する。
-先行        ：#{r.left.senjuObject.class::SENJU_TYPE}/#{r.left.senjuObject.name}
+先行        ：#{prev.senjuObject.class::SENJU_TYPE}/#{prev.senjuObject.name}
 後続        ：#{r.senjuObject.class::SENJU_TYPE}/#{r.senjuObject.name}
 EOS
           }
           ret = execute_task task
-          if ret == TaskExecuter::STATUS_OK.code then
-            raise TaskExecuter::STATUS_OK
+          if ret == STATUS_OK.code then
+            raise STATUS_OK
           end
-          if ret == TaskExecuter::STATUS_NG.code then
-            raise TaskExecuter::STATUS_NG
+          if ret == STATUS_NG.code then
+            raise STATUS_NG
           end
         end
       end
 
-      ret = TaskExecuter::STATUS_CONT.code
+      ret = STATUS_CONT.code
 
       task = config.tasks.by_reference[r.senjuNet.name][r.senjuObject.name].pre_task
-      unless task.nil? then
-        info { "ネットのオブジェクト（#{r.senjuNet.name}:#{r.senjuObject.name}）の先行タスクを実行する" }
-        ret = execute_task task
-        if ret == TaskExecuter::STATUS_OK.code then
-          raise TaskExecuter::STATUS_OK
-        end
-        if ret == TaskExecuter::STATUS_NG.code then
-          raise TaskExecuter::STATUS_NG
-        end
+      task = config.default.pre_task if task.nil?
+      info { "ネットのオブジェクト（#{r.senjuNet.name}:#{r.senjuObject.name}）の先行タスクを実行する" }
+      ret = execute_task task
+      if ret == STATUS_OK.code then
+        raise STATUS_OK
+      end
+      if ret == STATUS_NG.code then
+        raise STATUS_NG
       end
 
-      if ret == TaskExecuter::STATUS_CONT.code then
-        ret = TaskExecuter::STATUS_CONT.code
+      if ret == STATUS_CONT.code then
+        ret = STATUS_CONT.code
         task = config.tasks.by_name[r.senjuObject.name].pre_task
-        unless task.nil? then
-          info { "オブジェクト（#{r.senjuObject.name}）の先行タスクを実行する" }
-          ret = execute_task task
-          if ret == TaskExecuter::STATUS_OK.code then
-            raise TaskExecuter::STATUS_OK
-          end
-          if ret == TaskExecuter::STATUS_NG.code then
-            raise TaskExecuter::STATUS_NG
-          end
+        task = config.default.pre_task if task.nil?
+        info { "オブジェクト（#{r.senjuObject.name}）の先行タスクを実行する" }
+        ret = execute_task task
+        if ret == STATUS_OK.code then
+          raise STATUS_OK
+        end
+        if ret == STATUS_NG.code then
+          raise STATUS_NG
         end
 
-        if ret == TaskExecuter::STATUS_CONT.code
-          if r.senjuObject.instanceof? SenjuNet then
+        if ret == STATUS_CONT.code
+          if r.senjuObject.is_a? SenjuNet then
             execute_net_objects(ctx, r.senjuObject)
-          elsif r.senjuObject.instanceof? SenjuJob then
+          elsif r.senjuObject.is_a? SenjuJob then
             execute_senju_job(config, ctx, r.senjuObject)
           end
         end
 
         task = config.tasks.by_name[r.senjuObject.name].post_task
-        unless task.nil? then
-          info { "オブジェクト（#{r.senjuObject.name}）の後続タスクを実行する" }
-          ret = execute_task task
-          if ret == TaskExecuter::STATUS_OK.code then
-            raise TaskExecuter::STATUS_OK
-          end
-          if ret == TaskExecuter::STATUS_NG.code then
-            raise TaskExecuter::STATUS_NG
-          end
+        task = config.default.post_task if task.nil?
+        info { "オブジェクト（#{r.senjuObject.name}）の後続タスクを実行する" }
+        ret = execute_task task
+        if ret == STATUS_OK.code then
+          raise STATUS_OK
+        end
+        if ret == STATUS_NG.code then
+          raise STATUS_NG
         end
       end
 
       task = config.tasks.by_reference[r.senjuNet.name][r.senjuObject.name].post_task
-      unless task.nil? then
-        info { "ネットのオブジェクト（#{r.senjuNet.name}:#{r.senjuObject.name}）の後続タスクを実行する" }
-        ret = execute_task task
-        if ret == TaskExecuter::STATUS_OK.code then
-          raise TaskExecuter::STATUS_OK
-        end
-        if ret == TaskExecuter::STATUS_NG.code then
-          raise TaskExecuter::STATUS_NG
-        end
+      task = config.default.post_task if task.nil?
+      info { "ネットのオブジェクト（#{r.senjuNet.name}:#{r.senjuObject.name}）の後続タスクを実行する" }
+      ret = execute_task task
+      if ret == STATUS_OK.code then
+        raise STATUS_OK
+      end
+      if ret == STATUS_NG.code then
+        raise STATUS_NG
       end
     end
 
     def execute_senju_job(config, ctx, senjuJob)
       task = {
-        env: {
-          host: ctx.host,
-          user: ctx.user
+        "env" => {
+          "host" => ctx.host,
+          "user" => ctx.user
         },
-        exec: {
-          type: "csh",
-          script: senjuJob.command
+        "exec" => {
+          "type" => "csh",
+          "script" => senjuJob.command
         }
       }
 
@@ -244,8 +239,8 @@ EOS
 EOS
            }
 
-      ENV[SENJU_STATUS] = ret
-      ENV[SENJU_EXPECTED] = senjuJob.expected
+      ENV[SENJU_STATUS] = ret.to_s
+      ENV[SENJU_EXPECTED] = senjuJob.expected.to_s
 
       ret
     end
