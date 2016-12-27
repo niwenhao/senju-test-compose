@@ -16,6 +16,9 @@ services:
         expose:
             - 3000
         command: bash -c 'while true; do sleep 10; done'
+        networks:
+          app_net:
+            ipv4_address: 172.21.1.10
     db:
         #build: db
         image: postgres
@@ -27,4 +30,15 @@ services:
           - ${HOME}/workspace/senju-test-compose/pgdata:/var/lib/postgresql/data
         hostname: db
         container_name: db
+        networks:
+          app_net:
+            ipv4_address: 172.21.1.11
 
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.1.0/24
+          gateway: 172.21.1.1
