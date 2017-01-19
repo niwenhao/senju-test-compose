@@ -14,7 +14,7 @@ testcase_name:
 #        fi
   default:
     exec_env:
-      host: 10.110.1.10
+      host: zxadmc01
       user: aplusr01
 
     pre_task:
@@ -40,26 +40,37 @@ testcase_name:
   exec_envs:
     by_name:
       zbtc10_aplu215:
-        host: 10.110.1.10
+        host: zxadmc01
         user: aplusr01
       zadc10_aplu101:
-        host: 10.110.1.10
+        host: zxadmc01
         user: aplusr01
   tasks:
     by_name:
-      zxtjnd002:
+      #(zxtjnd003)[ZXN]統計情報朝当番ファイル格納（統計情報）
+      #      zxtjnd003:
+      #        pre_task:
+      #          exec:
+      #            type: bash
+      #            script: exit $SJ_RET_BYEBUG
+      z2tjjd170001:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
             script: |
-              exit $SJ_RET_SKIP
-      zxtjnd003:
+              touch /APL/group02/pkg01/data0/tj/trgr/zintrg_016_fi
+              if [ $? == "0" ]; then
+                exit $SJ_RET_CONT
+              else
+                exit $SJ_RET_NG
+              fi
+      zxtjnd002:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -68,7 +79,7 @@ testcase_name:
       zxtjnd004:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -77,7 +88,7 @@ testcase_name:
       zxtjnd010:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -86,7 +97,7 @@ testcase_name:
       zxtjnd030:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -95,7 +106,7 @@ testcase_name:
       zxtjnd050:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -104,7 +115,7 @@ testcase_name:
       zxtjnd060:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -113,7 +124,7 @@ testcase_name:
       zxtjnd070:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -122,7 +133,7 @@ testcase_name:
       zxtjnd080:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -131,7 +142,7 @@ testcase_name:
       zxtjnd100:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -140,7 +151,7 @@ testcase_name:
       zxtjnm001:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -149,7 +160,7 @@ testcase_name:
       zxtjnm002:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -158,7 +169,7 @@ testcase_name:
       zxtjnm003:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh
@@ -167,7 +178,7 @@ testcase_name:
       zxtjnd180:
         pre_task:
           env:
-            host: 10.110.1.10
+            host: zxadmc01
             user: aplusr01
           exec:
             type: cat | csh

@@ -9,29 +9,64 @@ services:
             POSTGRES_PASSWORD: password
         volumes:
           - ${HOME}/workspace/senju-test-compose/pgdata:/var/lib/postgresql/data
+          - /APL/share:/APL/share
         hostname: db
         container_name: db
         networks:
           app_net:
             ipv4_address: 172.21.1.11
+    adm:
+        build: adm
+        image: senjuzxadmc01
+        hostname: zxadmc01
+        container_name: adm
+        volumes:
+          - /APL/share:/APL/share
+          - /root/workspace/senju-test-compose/adm/bt:/APL/group01/bt
+          - /root/workspace:/workspace
+        user: root
+        command: bash -c 'service rsyslog start && service sshd start && tail -f /var/log/messages'
+        extra_hosts:
+            - "zxadmc01:172.21.1.70"
+            - "zxbatc01:172.21.1.71"
+        networks:
+          app_net:
+            ipv4_address: 172.21.1.70
+    bat:
+        build: bat
+        image: senjuzxbatc01
+        hostname: zxbatc01
+        container_name: bat
+        volumes:
+          - /APL/share:/APL/share
+          - /root/workspace/senju-test-compose/bat/local01:/APL/group01/local
+          - /root/workspace/senju-test-compose/bat/local02:/APL/group02/local
+          - /root/workspace:/workspace
+        user: root
+        command: bash -c 'service rsyslog start && service sshd start && tail -f /var/log/messages'
+        extra_hosts:
+            - "zxadmc01:172.21.1.70"
+            - "zxbatc01:172.21.1.71"
+        networks:
+          app_net:
+            ipv4_address: 172.21.1.71
     app:
         build: app
         image: senjuapp
         hostname: app
         container_name: app
         volumes:
-            - ${HOME}/workspace/senju-test-compose/SenjuTest:/home/dev/SenjuTest:rw
-            - ${HOME}/myhome/_vimrc:/home/dev/.vimrc
-            - ${HOME}/myhome/_vim:/home/dev/.vim
-            - /etc/rootca.crt:/etc/rootca.crt
+          - ${HOME}/workspace/senju-test-compose/SenjuTest:/home/dev/SenjuTest:rw
+          - ${HOME}/myhome/_vimrc:/home/dev/.vimrc
+          - ${HOME}/myhome/_vim:/home/dev/.vim
+          - /etc/rootca.crt:/etc/rootca.crt
+          - /APL/share:/APL/share
+          - /root/workspace:/workspace
         env_file: /etc/environment
-#        links:
-#            - db:db
-        expose:
-            - 3000
         command: bash -c 'while true; do sleep 10; done'
         extra_hosts:
-            - "zxadmc01:10.110.1.10"
+            - "zxadmc01:172.21.1.70"
+            - "zxbatc01:172.21.1.71"
             - "db:172.21.1.11"
         networks:
           app_net:
