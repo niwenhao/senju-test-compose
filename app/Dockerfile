@@ -14,3 +14,4 @@ run mkdir -p /home/dev/.ssh && chmod 700 /home/dev/.ssh
 copy id_rsa /tmp/id_rsa
 run cat /tmp/id_rsa > /home/dev/.ssh/id_rsa
 run chmod 600 /home/dev/.ssh/id_rsa
+

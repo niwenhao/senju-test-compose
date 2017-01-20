@@ -21,9 +21,20 @@ run mkdir -p ~/.ssh && cp /tmp/ssh/* ~/.ssh/. && chmod -R go-rw ~/.ssh && cp /TS
 
 user libran01
 run mkdir -p ~/.ssh && cp /tmp/ssh/* ~/.ssh/. && chmod -R go-rw ~/.ssh && cp /TS_un/_.bashrc ~/.bashrc
+run ln -s /APL/share/build_release_system ~/build_release_system
 
 user aplusr02
 run mkdir -p ~/.ssh && cp /tmp/ssh/* ~/.ssh/. && chmod -R go-rw ~/.ssh && cp /TS_un/_.cshrc ~/.cshrc
 
 user libran02
 run mkdir -p ~/.ssh && cp /tmp/ssh/* ~/.ssh/. && chmod -R go-rw ~/.ssh && cp /TS_un/_.bashrc ~/.bashrc
+run ln -s /APL/share/build_release_system ~/build_release_system
+
+user root
+run echo password | passwd --stdin libran01
+run echo password | passwd --stdin aplusr01
+run echo password | passwd --stdin libran02
+run echo password | passwd --stdin aplusr02
+
+run echo  >> /etc/ssh/sshd_config
+run echo 'AcceptEnv SJ_*' >> /etc/ssh/sshd_config

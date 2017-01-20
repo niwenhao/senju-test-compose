@@ -39,9 +39,12 @@ testcase_name:
 
   exec_envs:
     by_name:
-      zbtc10_aplu215:
-        host: zxadmc01
+      zbtc10_aplu115:
+        host: zxbatc01
         user: aplusr01
+      zbtc10_aplu215:
+        host: zxbatc01
+        user: aplusr02
       zadc10_aplu101:
         host: zxadmc01
         user: aplusr01
@@ -56,10 +59,10 @@ testcase_name:
       z2tjjd170001:
         pre_task:
           env:
-            host: zxadmc01
-            user: aplusr01
+            host: zxbatc01
+            user: aplusr02
           exec:
-            type: cat | csh
+            type: cat | bash
             script: |
               touch /APL/group02/pkg01/data0/tj/trgr/zintrg_016_fi
               if [ $? == "0" ]; then
@@ -67,6 +70,44 @@ testcase_name:
               else
                 exit $SJ_RET_NG
               fi
+        post_task:
+          env:
+            host: zxbatc01
+            user: aplusr02
+          exec:
+            type: cat | bash
+            script: |
+              if [ -e /APL/group02/pkg01/data0/tj/trgr/zintrg_016_fi ]; then
+                exit $SJ_RET_NG
+              else
+                exit $SJ_RET_CONT
+              fi
+      z2tjjd170002:
+        pre_task:
+          env:
+            host: zxbatc01
+            user: aplusr02
+          exec:
+            type: cat | csh
+            script: |
+              rm ${APL_PKG01_DIR}/data0/tj/zktjd016k01_morning_*.log
+              rm ${APL_PKG01_DIR}/log/kt/zktjd016k01_morning_*.log
+              setenv SJ_PEX_JOB z1sajd016k01
+              setenv SJ_PEX_DATE 20160916
+              zsajd016k01.csh
+              exit $status
+      z2tjjd170003:
+        pre_task:
+          env:
+            host: zxbatc01
+            user: aplusr02
+          exec:
+            type: cat | bash -x
+            script: |
+              FROM_PATH=$(ls ${APL_PKG01_DIR}/data0/tj/zktjd016k01_morning_*.log | head -1)
+              TO_PATH=$(echo $FROM_PATH | perl -pe 's/\d\d\d\d\d\d\d\d(\d\d\d\d\d\d.log)$/20160916\1/g')
+              mv $FROM_PATH $TO_PATH
+              exit $SJ_RET_CONT
       zxtjnd002:
         pre_task:
           env:
