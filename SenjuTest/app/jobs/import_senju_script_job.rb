@@ -24,17 +24,27 @@ class ImportSenjuScriptJob < ApplicationJob
     extrace_jar()
 
     LOG.info { "稼動環境定義を取り込み" }
-    import_env
+    ActiveRecord::Base.transaction do
+      import_env
+    end
 
     LOG.info { "トリガ定義を取り込み" }
-    import_triger
+    ActiveRecord::Base.transaction do
+      import_triger
+    end
 
     LOG.info { "ジョブ定義を取り込み" }
-    import_job
+    ActiveRecord::Base.transaction do
+      import_job
+    end
 
     LOG.info { "ネット定義を取り込み" }
-    pre_import_net
-    import_net
+    ActiveRecord::Base.transaction do
+      pre_import_net
+    end
+    ActiveRecord::Base.transaction do
+      import_net
+    end
   end
 
   def pre_import_net

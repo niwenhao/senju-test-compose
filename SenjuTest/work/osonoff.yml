@@ -56,6 +56,7 @@ testcase_name:
       #          exec:
       #            type: bash
       #            script: exit $SJ_RET_BYEBUG
+
       z2tjjd170001:
         pre_task:
           env:
@@ -95,7 +96,7 @@ testcase_name:
               setenv SJ_PEX_JOB z1sajd016k01
               setenv SJ_PEX_DATE 20160916
               zsajd016k01.csh
-              exit $status
+              exit $SJ_RET_BYEBUG
       z2tjjd170003:
         pre_task:
           env:
@@ -132,9 +133,14 @@ testcase_name:
             host: zxadmc01
             user: aplusr01
           exec:
-            type: cat | csh
+            type: cat | bash
             script: |
-              exit $SJ_RET_SKIP
+              cp /APL/share/bkup/logsgets/20100525094010logsget_newformat.tar.gz /bkup/bkdata1/forapl/logsget.tar.gz
+              if [ $? == "0" ]; then
+                exit $SJ_RET_CONT
+              else
+                exit $SJ_RET_BYEBUG
+              fi
       zxtjnd030:
         pre_task:
           env:

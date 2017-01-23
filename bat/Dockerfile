@@ -18,17 +18,25 @@ run mkdir -p /APL/group02 && cp -r /APL/group01/pkg01 /APL/group02/pkg01 && chow
 
 user aplusr01
 run mkdir -p ~/.ssh && cp /tmp/ssh/* ~/.ssh/. && chmod -R go-rw ~/.ssh && cp /TS_un/_.cshrc ~/.cshrc
+run ln -s /APL/share/vim/_vimrc ~/.vimrc
+run mkdir -p ~/order/tools/morning && ln -s /APL/share/shell/dummy.sh ~/order/tools/morning/morning_order.csh
+run mkdir -p ~/power && ln -s /APL/share/shell/dummy.sh ~/power/morning_power.csh
 
 user libran01
 run mkdir -p ~/.ssh && cp /tmp/ssh/* ~/.ssh/. && chmod -R go-rw ~/.ssh && cp /TS_un/_.bashrc ~/.bashrc
 run ln -s /APL/share/build_release_system ~/build_release_system
+run ln -s /APL/share/vim/_vimrc ~/.vimrc
 
 user aplusr02
 run mkdir -p ~/.ssh && cp /tmp/ssh/* ~/.ssh/. && chmod -R go-rw ~/.ssh && cp /TS_un/_.cshrc ~/.cshrc
+run ln -s /APL/share/vim/_vimrc ~/.vimrc
+run mkdir -p ~/order/tools/morning && ln -s /APL/share/shell/dummy.sh ~/order/tools/morning/morning_order.csh
+run mkdir -p ~/power && ln -s /APL/share/shell/dummy.sh ~/power/morning_power.csh
 
 user libran02
 run mkdir -p ~/.ssh && cp /tmp/ssh/* ~/.ssh/. && chmod -R go-rw ~/.ssh && cp /TS_un/_.bashrc ~/.bashrc
 run ln -s /APL/share/build_release_system ~/build_release_system
+run ln -s /APL/share/vim/_vimrc ~/.vimrc
 
 user root
 run echo password | passwd --stdin libran01
@@ -38,3 +46,8 @@ run echo password | passwd --stdin aplusr02
 
 run echo  >> /etc/ssh/sshd_config
 run echo 'AcceptEnv SJ_*' >> /etc/ssh/sshd_config
+
+run ln -s /TS_un/tssen01 /TS_un/tssen02
+
+run ln -s /APL/share/bin/sqlplus /usr/local/bin/sqlplus
+run ln -s /APL/share/bin/sqlldr /usr/local/bin/sqlldr

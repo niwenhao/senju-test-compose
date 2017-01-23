@@ -24,11 +24,14 @@ services:
           - /APL/share:/APL/share
           - /root/workspace/senju-test-compose/adm/bt:/APL/group01/bt
           - /root/workspace/senju-test-compose/adm/pkg:/APL/group01/pkg01
+          - /root/workspace/senju-test-compose/bkup:/bkup
           - /root/workspace:/workspace
         user: root
         command: bash -c 'service rsyslog start && service sshd start && tail -f /var/log/messages'
         extra_hosts:
             - "zxadmc01:172.21.1.70"
+            - "zxadmc10:172.21.1.70"
+            - "smtp01:172.21.1.10"
             - "zxbatc01:172.21.1.71"
         ports:
           - "2202:22"
@@ -53,7 +56,9 @@ services:
           - "2203:22"
         extra_hosts:
             - "zxadmc01:172.21.1.70"
+            - "zxadmc10:172.21.1.70"
             - "zxbatc01:172.21.1.71"
+            - "smtp01:172.21.1.10"
         networks:
           app_net:
             ipv4_address: 172.21.1.71
@@ -74,10 +79,12 @@ services:
           RAILS_ENV: development
           JAR_PATH: senju.jar
           TESTCASE: /home/dev/SenjuTest/work/osonoff.yml
-        command: bash -c 'while true; do sleep 10; done'
+        user: root
+        command: bash -c 'cd /APL/share/mail && ruby smtp-server.rb'
         extra_hosts:
             - "zxadmc01:172.21.1.70"
             - "zxbatc01:172.21.1.71"
+            - "zxadmc10:172.21.1.70"
             - "db:172.21.1.11"
         ports:
           - "2201:22"
